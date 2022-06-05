@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 /* 
   【Storageフック】
@@ -9,22 +9,26 @@ import { useState, useEffect } from 'react';
 　  - localstrageにあるTodoを削除する
 */
 
-const STORAGE_KEY = 'itss-todo';
+// const STORAGE_KEY = 'itss-todo';
 
-function useStorage() {
-  const [items, setItems] = useState([]);
-　
-　/* 副作用を使う */
+function getSavedTodo(initialValue) {
+  const savedTodo = JSON.parse(localStorage.getItem("savedTodo"));
+  if (savedTodo && savedTodo.length !== 0) return savedTodo;
+
+  return initialValue;
+}
+
+function useStorage(initialValue) {
+  const [items, putItems] = useState(
+    getSavedTodo(initialValue)
+  ); /* 副作用を使う */
+
   useEffect(() => {
-    
-  }, []);
-
-  const putItems = items => {
-    
-  };
+    localStorage.setItem("savedTodo", JSON.stringify(items));
+  }, [items]);
 
   const clearItems = () => {
-    
+    putItems([]);
   };
 
   return [items, putItems, clearItems];
